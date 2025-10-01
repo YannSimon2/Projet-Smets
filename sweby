@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation  
 
 
-time = np.linspace(0, 1, 100)
-x = np.linspace(0, 1, 100)
+time = np.linspace(0, 1, 1000)
+x = np.linspace(0, 1, 1000)
 dt = time[1] - time[0]
 dx = x[1] - x[0]
-a = 1.0
+a = 0.01
 
 
 def f(w):
@@ -30,25 +30,28 @@ def lax_wendroff(F,w,f):
     return F, w
 
 # Initial condition: for example, a step function
-w[0, :] = np.where(x < 0.5, 1.0, 0.0)
-
+w[0, :] = np.exp(-((x - 0.25) ** 2) / (2 * 0.05 ** 2))
+#w[0, :] = np.where(x < 0.5, 1.0, 0.0)
+w0 = w[0, :].copy()
 # Compute the solution
 F, w = lax_wendroff(F, w, f)
 
 # Set up the plot
 fig, ax = plt.subplots()
 line, = ax.plot(x, w[0, :])
+init = ax.plot(x, w0, 'k--', label='Initial Condition')
 ax.set_ylim(np.min(w), np.max(w)+0.1)
 ax.set_xlabel('x')
 ax.set_ylabel('w')
 ax.set_title('Time Evolution of Solution')
-
+ax.legend()
 def update(frame):
     line.set_ydata(w[frame, :])
     ax.set_title(f'Time Evolution of Solution (t={time[frame]:.2f})')
+    ax.set_ylim(np.min(w[frame, :]), np.max(w[frame, :])+0.1)
     return line,
 
-ani = FuncAnimation(fig, update, frames=len(time), interval=50, blit=True)
+ani = FuncAnimation(fig, update, frames=len(time), interval=50, blit=False)
 plt.show()
 
 
