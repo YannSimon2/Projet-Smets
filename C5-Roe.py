@@ -22,13 +22,9 @@ def f(u):
 
 # Roe flux (scalar case reduces to upwind)
 def roe_flux(ul, ur):
-    # Eigenvalue = a
-    lam = a
-    # Upwind flux
-    if lam >= 0:
-        return f(ul)
-    else:
-        return f(ur)
+    def roe_flux(uL, uR, a):
+    """Roe flux for linear advection."""
+    return 0.5 * a * (uL + uR) - 0.5 * abs(a) * (uR - uL)
 
 # Time integration loop
 t = 0.0
