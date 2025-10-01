@@ -1,0 +1,23 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+time = np.linspace(0, 1, 100)
+x = np.linspace(0, 1, 100)
+dt = time[1] - time[0]
+dx = x[1] - x[0]
+
+
+
+def lax_wendroff(F,w,f):
+    nu = dt/dx
+    A = np.zeros((len(time), len(x)))
+    for n in range(len(time)-1):
+        for j in range(1, len(x)-1):            
+            if w[n,j+1] != w[n,j]:
+                A[n+1,j] = (f(w[n,j+1]) - f(w[n,j])) / (w[n,j+1] - w[n,j])
+            else:
+                A[n+1,j] = A[n,j]
+            F[n+1,j] = (f(w[n,j+1])+ f(w[n,j]))/2 - nu/2 * A[n+1,j]**2 * (w[n,j+1] - w[n,j])
+
+

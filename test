@@ -1,0 +1,36 @@
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+# Parameters
+nx = 101          # number of spatial points
+L = 1.0           # length of domain
+dx = L / (nx - 1) # spatial step
+c = 1.0           # advection speed
+sigma = 0.8       # CFL number
+dt = sigma * dx / c  # time step
+nt = 100          # number of time steps
+
+# Initial condition: Gaussian pulse
+x = np.linspace(0, L, nx)
+u0 = np.exp(-100 * (x - 0.5)**2)
+u = u0.copy()
+
+# Law-Wendroff method
+for n in range(nt):
+    un = u.copy()
+    u[1:-1] = (un[1:-1] - 0.5 * sigma * (un[2:] - un[:-2]) +
+               0.5 * sigma**2 * (un[2:] - 2*un[1:-1] + un[:-2]))
+    # Periodic BCs
+    u[0] = (un[0] - 0.5 * sigma * (un[1] - un[-2]) +
+            0.5 * sigma**2 * (un[1] - 2*un[0] + un[-2]))
+    u[-1] = u[0]
+
+# Plot results
+plt.plot(x, u0, label='Initial')
+plt.plot(x, u, label='After {} steps'.format(nt))
+plt.legend()
+plt.xlabel('x')
+plt.ylabel('u')
+plt.title('Linear Advection: Law-Wendroff')
+plt.show()
