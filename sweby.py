@@ -38,7 +38,7 @@ F, w = lax_wendroff(F, w, f)
 # Set up the plot
 fig, ax = plt.subplots()
 line, = ax.plot(x, w[0, :])
-ax.set_ylim(np.min(w), np.max(w)+0.1)
+ax.set_ylim(np.min(w), np.max(w))
 ax.set_xlabel('x')
 ax.set_ylabel('w')
 ax.set_title('Time Evolution of Solution')
