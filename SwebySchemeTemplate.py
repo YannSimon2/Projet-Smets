@@ -138,6 +138,7 @@ class Sweby1():
             
             # Lax-Wendroff flux
             F_lw[j] = (f(w[j+1]) + f(w[j]))/2 - nu/2 * A[j] * np.abs(A[j]) * (w[j+1] - w[j])
+            #F_lw[j] = (f(w[j+1]) + f(w[j]))/2 - nu/2 * A[j]**2 * (w[j+1] - w[j])
             
             # Roe flux (properly handles negative wave speeds)
             F_roe[j] = (f(w[j+1]) + f(w[j]))/2 - np.abs(A[j])/2 * (w[j+1] - w[j])
