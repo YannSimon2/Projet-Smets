@@ -90,6 +90,12 @@ class Sweby1():
         elif limiter_type == 'mc':
             # Monotonized Central limiter: φ(r) = max(0, min(2r, (1+r)/2, 2))
             return np.maximum(0, np.minimum(np.minimum(2*r, (1+r)/2), 2))
+        elif limiter_type == 'van_albada':
+            # van Albada limiter: φ(r) = (r^2 + r) / (1 + r^2)
+            return np.max(0,(r**2 + r) / (1 + r**2))
+        elif limiter_type == 'chak_&_osher':
+            # Chakravarthy & Osher limiter: φ(r) = (r + |r|) / (1 + |r|)
+            return np.max(0,np.min(3/2,r))
         else:
             # Default to van Leer
             return (r + np.abs(r)) / (1 + np.abs(r))
@@ -147,7 +153,7 @@ class Sweby1():
                         r = 1.0
                 else:  # Left-moving wave
                     if np.abs(w[j+2] - w[j+1]) > epsilon:
-                        r = (w[j] - w[j-1]) / (w[j+2] - w[j+1])
+                        r = (w[j] - w[j-1]) / (w[j+1] - w[j])
                     else:
                         r = 1.0
             else:
